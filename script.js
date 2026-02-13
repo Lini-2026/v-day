@@ -32,38 +32,10 @@ let yesTeasedCount = 0
 
 let noClickCount = 0
 let runawayEnabled = false
-let musicPlaying = true
 
 const catGif = document.getElementById('cat-gif')
 const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
-const music = document.getElementById('bg-music')
-
-// Autoplay: audio starts muted (bypasses browser policy), unmute immediately
-music.muted = true
-music.volume = 0.3
-music.play().then(() => {
-    music.muted = false
-}).catch(() => {
-    // Fallback: unmute on first interaction
-    document.addEventListener('click', () => {
-        music.muted = false
-        music.play().catch(() => {})
-    }, { once: true })
-})
-
-function toggleMusic() {
-    if (musicPlaying) {
-        music.pause()
-        musicPlaying = false
-        document.getElementById('music-toggle').textContent = '🔇'
-    } else {
-        music.muted = false
-        music.play()
-        musicPlaying = true
-        document.getElementById('music-toggle').textContent = '🔊'
-    }
-}
 
 function handleYesClick() {
     if (!runawayEnabled) {
@@ -73,7 +45,17 @@ function handleYesClick() {
         showTeaseMessage(msg)
         return
     }
-    window.location.href = 'yes.html'
+    
+// 🔥 เล่นเพลงตอนกด Yes (ไม่โดน block)
+    const iframe = document.createElement("iframe")
+    iframe.src = "https://www.youtube.com/embed/YarIck0gOe8?autoplay=1&loop=1&playlist=YarIck0gOe8"
+    iframe.allow = "autoplay"
+    iframe.style.display = "none"
+    document.body.appendChild(iframe)
+
+    setTimeout(() => {
+        window.location.href = "yes.html"
+    }, 800)
 }
 
 function showTeaseMessage(msg) {
